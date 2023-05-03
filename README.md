@@ -2,7 +2,7 @@
 
 Web application for SecretSheath system that allows teams to share sensitive files such as configuration information, credentials, etc.
 
-Please also note the Web API that it uses: https://github.com/ISS-Security/credence-api
+Please also note the Web API that it uses: https://github.com/CryptoEpsilon/SecretSheath
 
 ## Install
 
