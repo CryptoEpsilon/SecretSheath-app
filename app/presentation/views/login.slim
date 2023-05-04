@@ -9,10 +9,10 @@ div class="row"
     form method='post' action='/auth/login' id='form-login'
       div class="form-group"
         div class='form-floating mb-3'
-          input type='text' class='form-control' id='input-username' placeholder='Username'
+          input type='text' class='form-control' id='input-username' placeholder='Username' name='username'
           label for='input-username' Username
         div class='form-floating'
-          input type='password' class='form-control' id='input-password' placeholder='Password'
+          input type='password' class='form-control' id='input-password' placeholder='Password' name='password'
           label for='input-password' Password
         br
       button type='submit' id='button-login' value='login' class="btn btn-primary btn-block" login

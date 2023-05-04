@@ -17,7 +17,8 @@ module SecretSheath
 
       raise(UnauthorizedError) unless response.code == 200
 
-      response.parse['attributes']
+      puts "response.parse: #{response.parse}"
+      response.parse
     end
   end
 end

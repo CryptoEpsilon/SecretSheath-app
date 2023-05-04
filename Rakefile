@@ -33,7 +33,7 @@ namespace :run do
   # Run in development mode
   desc 'Run Web App in development mode'
   task :dev => :print_env do
-    sh 'puma -p 9292'
+    sh 'puma -p 9292 -v'
   end
 end
 # rubocop:enable Style/HashSyntax

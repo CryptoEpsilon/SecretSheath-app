@@ -6,7 +6,7 @@ require_relative './app'
 module SecretSheath
   # Web controller for SecretSheath API
   class App < Roda
-    route('auth') do |routing|
+    route('auth') do |routing| # rubocop:disable Metrics/BlockLength
       @login_route = '/auth/login'
       routing.is 'login' do
         # GET /auth/login
@@ -22,6 +22,11 @@ module SecretSheath
           )
 
           session[:current_account] = account
+          session[:master_key] = ConstructKey.call(
+            encoded_salt: account['masterkey_salt'],
+            password: routing.params['password']
+          )
+
           flash[:notice] = "Welcome back #{account['username']}!"
           routing.redirect '/'
         rescue StandardError
