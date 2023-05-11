@@ -11,10 +11,10 @@ module SecretSheath
       digest_size = 64
 
       salt = Base64.strict_decode64(encoded_salt)
-      RbNaCl::PasswordHash.scrypt(
-        password, salt,
-        opslimit, memlimit, digest_size
-      )
+      Base64.strict_encode64(RbNaCl::PasswordHash.scrypt(
+                               password, salt,
+                               opslimit, memlimit, digest_size
+                             ))
     end
   end
 end

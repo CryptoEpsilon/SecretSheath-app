@@ -21,12 +21,12 @@ module SecretSheath
             password: routing.params['password']
           )
 
-          SecureSession.new(session).set(:current_account, account)
-
-          session[:master_key] = ConstructKey.call(
+          account['masterkey'] = ConstructKey.call(
             encoded_salt: account['masterkey_salt'],
             password: routing.params['password']
           )
+          account.delete('masterkey_salt')
+          SecureSession.new(session).set(:current_account, account)
 
           flash[:notice] = "Welcome back #{account['username']}!"
           routing.redirect '/'

@@ -17,11 +17,9 @@ module SecretSheath
       response = HTTP.post("#{@config.API_URL}/auth/authenticate",
                            json: { username:, password: })
 
-      
       raise(UnauthorizedError) if response.code == 403
       raise(ApiServerError) if response.code != 200
 
-      puts "response.parse: #{response.parse}"
       response.parse
     end
   end
