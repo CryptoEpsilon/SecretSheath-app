@@ -1,4 +1,4 @@
-auth.rb# frozen_string_literal: true
+# frozen_string_literal: true
 
 require 'roda'
 require_relative './app'
@@ -6,7 +6,7 @@ require_relative './app'
 module SecretSheath
   # Web controller for SecretSheath API
   class App < Roda
-    route('auth') do |routing| # rubocop:disable Metrics/BlockLength
+    route('auth') do |routing|
       @login_route = '/auth/login'
       routing.is 'login' do
         # GET /auth/login
@@ -16,25 +16,17 @@ module SecretSheath
 
         # POST /auth/login
         routing.post do
-          account = AuthenticateAccount.new(App.config).call(
+          account_info = AuthenticateAccount.new(App.config).call(
             username: routing.params['username'],
             password: routing.params['password']
           )
-
-          account['masterkey'] = ConstructKey.call(
-            encoded_salt: account['masterkey_salt'],
-            password: routing.params['password']
-          )
-          account.delete('masterkey_salt')
-
           current_account = Account.new(
             account_info[:account],
             account_info[:auth_token]
           )
+          CurrentSession.new(session).current_account = current_account
 
-	  CurrentSession.new(session).current_account = current_account
-
-          flash[:notice] = "Welcome back #{account['username']}!"
+          flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
         rescue AuthenticateAccount::UnauthorizedError
           flash.now[:error] = 'Username and password did not match our records'

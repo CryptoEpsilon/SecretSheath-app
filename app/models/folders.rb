@@ -9,7 +9,7 @@ module SecretSheath
 
     def initialize(folders_list)
       @all = folders_list.map do |folder|
-        Folder.new(folder)
+        Folder.new(folder['data'])
       end
     end
   end

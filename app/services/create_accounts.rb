@@ -5,7 +5,8 @@ require 'http'
 module SecretSheath
   # Returns an authenticated user, or nil
   class CreateAccount
-    class InvalidAccount < StandardError; end
+    # Error for account creation fail
+    class InvalidAccount < StandardError
       def message = 'This account can no longer be created: please start again'
     end
 

@@ -8,9 +8,9 @@ module SecretSheath
   class App < Roda
     route('account') do |routing|
       routing.on do
-        # GET /account/login
+        # GET /account/
         routing.get String do |username|
-          if @current_account && @current_account['username'] == username
+          if @current_account && @current_account.username == username
             view :account, locals: { current_account: @current_account }
           else
             routing.redirect '/auth/login'
@@ -39,9 +39,8 @@ module SecretSheath
           routing.redirect(
             "#{App.config.APP_URL}/auth/register/#{registration_token}"
           )
-
+        end
       end
     end
   end
-end
 end

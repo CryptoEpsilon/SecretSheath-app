@@ -22,7 +22,7 @@ module SecretSheath
 
       account_info = JSON.parse(response.to_s)['attributes']
 
-      { account: account_info['account']['attributes'],
+      { account: account_info['account'],
         auth_token: account_info['auth_token'] }
     rescue HTTP::ConnectionError
       raise ApiServerError
