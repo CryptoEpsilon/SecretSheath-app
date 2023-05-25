@@ -1,0 +1,6 @@
+form role="form" action="/decrypt/#{folder.name}/#{key.alias}" method='post' id='decrypt-data-form'
+    div class="form-group"
+        label for='ciphertext_input' Ciphertext to Decrypt:
+        textarea name='ciphertext' id='ciphertext_input' class="form-control" placeholder="Enter ciphertext to decrypt" required=""
+    button type='submit' class="btn btn-primary submit mt-4" id='decryption-form-submit' value='submit' Decrypt
+    button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal" Cancel

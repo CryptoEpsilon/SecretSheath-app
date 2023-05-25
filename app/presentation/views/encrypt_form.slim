@@ -1,0 +1,6 @@
+form role="form" action="/encrypt/#{folder.name}/#{key.alias}" method='post' id='encrypt-data-form'
+    div class="form-group"
+        label for='plaintext_input' Plaintext to Encrypt:
+        textarea name='plaintext' id='plaintext_input' class="form-control" placeholder="Enter plaintext to encrypt" required=""
+    button type='submit' class="btn btn-primary submit mt-4" id='encryption-form-submit' value='submit' Encrypt
+    button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal" Cancel

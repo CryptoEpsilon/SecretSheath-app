@@ -2,6 +2,7 @@ div class="row" style="vertical-align: bottom;"
   div class="col-xs-9"
     h3 All Folders
   div class="col-xs-3"
+    button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFolderModal" + New Folder
 table class="table"
   thead
     tr
@@ -11,6 +12,10 @@ table class="table"
     - folders.all.each do |folder|
       tr
         td 
-          a href="/account/projects/#{proj.id}" #{folder.name}
+          a href="/folders/#{folder.name}" #{folder.name}
           td 
             a #{folder.description}
+    tr
+      td
+        a href="/folders/shared" Shared
+include :folder_new_partial

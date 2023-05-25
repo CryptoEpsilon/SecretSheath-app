@@ -1,0 +1,5 @@
+en:
+  errors:
+    keyname: 'provide keyname with up to 255 legal characters'
+    keyname_valid?: 'keyname has illegal characters (e.g., & | \\ / <tab>'
+    description: 'provide a description'
