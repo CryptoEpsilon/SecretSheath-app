@@ -11,15 +11,18 @@ form role="form" action="/encrypt/#{folder.name}/" method='post' id='encrypt-dat
                 input class="form-check-input" type="radio" name="expire_in" id="expire_in" value=0 checked=""
                 label class="form-check-label" for="expire_in" None
             div class="form-check"
+                input class="form-check-input" type="radio" name="expire_in" id="expire_in" value=10
+                label class="form-check-label" for="expire_in" 10 Sec
+            div class="form-check"
                 input class="form-check-input" type="radio" name="expire_in" id="expire_in" value=60
                 label class="form-check-label" for="expire_in" 1 Minute
             div class="form-check"
                 input class="form-check-input" type="radio" name="expire_in" id="expire_in" value=3600
                 label class="form-check-label" for="expire_in" 1 Hour
+        div class="col-sm-4"
             div class="form-check"
                 input class="form-check-input" type="radio" name="expire_in" id="expire_in" value=86400
                 label class="form-check-label" for="expire_in" 1 Day
-        div class="col-sm-4"
             div class="form-check"
                 input class="form-check-input" type="radio" name="expire_in" id="expire_in" value=604800
                 label class="form-check-label" for="expire_in" 1 Week
