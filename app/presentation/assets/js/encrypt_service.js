@@ -15,6 +15,7 @@ encrypt_button.addEventListener('click', () => {
     xhr.send(JSON.stringify({ "plaintext": plaintext, "expire_in": expire_in_value }));
 
     output = cipherOutModal.getElementsByTagName('pre')[0];
+    output.innerText = 'Encrypting...'
 
     xhr.onload = () => {
             if (xhr.status === 200) {

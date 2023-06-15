@@ -12,6 +12,7 @@ decrypt_button.addEventListener('click', () => {
     xhr.send(JSON.stringify({ "ciphertext": ciphertext }));
 
     output = cipherOutModal.getElementsByTagName('pre')[0];
+    output.innerText = 'Decrypting...'
 
     xhr.onload = () => {
         if (xhr.status === 200) {
