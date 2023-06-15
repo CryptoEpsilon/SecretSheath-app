@@ -23,7 +23,7 @@ module SecretSheath
         # POST /account/<registration_token>
         routing.post String do |registration_token|
           password = Form::Password.new.call(routing.params)
-          raise Form.message_values(passwords) if passwords.failure?
+          raise Form.message_values(password) if password.failure?
 
           new_account = SecureMessage.decrypt(registration_token)
           CreateAccount.new(App.config).call(
