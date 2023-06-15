@@ -17,13 +17,23 @@ module SecretSheath
             folder = Folder.new(folder_info)
             view :folder, locals: { current_account: @current_account, folder: }
           end
+
+          # POST /folders/[folder_name]
+          routing.post do
+            response = DeleteFolder.new(App.config).call(@current_account, folder_name)
+            flash[:notice] = response['message']
+          rescue StandardError => e
+            puts "FAILURE Deleting folder: #{e.inspect}"
+            flash[:error] = 'Could not delete folder'
+          ensure
+            routing.redirect @folders_route
+          end
         end
 
         # GET /folders/
         routing.get do
           if @current_account.logged_in?
             folder_list = GetAllFolders.new(App.config).call(@current_account)
-
             folders = Folders.new(folder_list)
             view :folders_all,
                  locals: { current_user: @current_account, folders: }
@@ -40,6 +50,7 @@ module SecretSheath
             flash[:error] = Form.message_values(folder_data)
             routing.halt
           end
+          folder_data.to_h[:name].gsub!(/\s/, '_')
 
           CreateNewFolder.new(App.config).call(
             current_account: @current_account,

@@ -1,18 +1,17 @@
 div id="keyModal" class="modal fade" role="dialog" tabindex="-1" 
-  div class="modal-dialog modal-lg"
+  div class="modal-dialog modal-xl"
     div class="modal-content"
       div class="modal-header"
-        h4 
-            == "#{key.name}"
-        button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          h4 class="modal-title"
+          button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
       div class="modal-body"
         ul class="nav nav-pills"
           li class="nav-item"
-            a class="nav-link active" data-bs-toggle="pill" href="#Encrypt" Encrypt
+            a class="nav-link active" data-bs-toggle="pill" href="#Encrypt" id="encrypt-pill" Encrypt
           li class="nav-item"
-            a class="nav-link" data-bs-toggle="pill" href="#Decrypt" Decrypt
+            a class="nav-link" data-bs-toggle="pill" href="#Decrypt" id="decrypt-pill" Decrypt
           li class="nav-item"
-            a class="nav-link" data-bs-toggle="pill" href="#Manage" Manage
+            a class="nav-link" data-bs-toggle="pill" href="#Manage" id="manage-pill" Manage
         
         div class="tab-content mt-4" id="pills-tabContent"
           div class="tab-pane fade show active" id="Encrypt" role="tabpanel"
@@ -21,3 +20,7 @@ div id="keyModal" class="modal fade" role="dialog" tabindex="-1"
             include :decrypt_form
           div class="tab-pane fade" id="Manage" role="tabpanel"
             include :key_manage_panel
+
+== assets([:js, :encrypt])
+== assets([:js, :decrypt])
+== assets([:js, :key_manage])

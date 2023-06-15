@@ -8,30 +8,34 @@ module SecretSheath
   class App < Roda
     route('decrypt') do |routing|
       routing.on String, String do |folder_name, key_alias|
-        routing.redirect '/auth/login' unless @current_account.logged_in?
+        raise Account::AuthorizationError unless @current_account.logged_in?
+
         @decrypt_route = "/decrypt/#{folder_name}/#{key_alias}"
 
         # POST /decrypt/[folder_name]/[key_alias]
         routing.post do
-          ciphertext_data = Form::DecryptForm.new.call(routing.params)
+          req_body = JSON.parse(routing.body.read, symbolize_names: true)
+          ciphertext_data = Form::DecryptForm.new.call(req_body)
 
-          if ciphertext_data.failure?
-            flash[:error] = Form.message_values(ciphertext_data)
-            routing.halt
-          end
-          enc_res = RequestDecrypt.new(App.config).call(
+          routing.halt 400, { error: 'Bad Request' } if ciphertext_data.failure?
+
+          RequestDecrypt.new(App.config).call(
             current_account: @current_account,
             folder_name:,
             key_alias:,
             ciphertext_data: ciphertext_data.to_h
           )
-          flash[:notice] = "Plaintext: #{enc_res['data']['attributes']['plaintext']}"
-        rescue StandardError => e
-          puts "FAILURE Creating key: #{e.inspect}"
+        rescue Account::AuthorizationError => e
+          puts "FAILURE Decrypt cipher: #{e.inspect}"
           puts e.backtrace
-          flash[:error] = 'Could not process ciphertext'
-        ensure
-          routing.redirect "/folders/#{folder_name}"
+          routing.halt 401, { message: 'Unauthorized' }.to_json
+        rescue RequestDecrypt::DecryptError => e
+          puts "FAILURE Decrypt cipher: #{e.inspect}"
+          routing.halt 400, { message: 'Bad Request' }.to_json
+        rescue StandardError => e
+          puts "FAILURE Decrypt cipher: #{e.inspect}"
+          puts e.backtrace
+          routing.halt 500, { message: 'Internal Server Error' }.to_json
         end
       end
     end

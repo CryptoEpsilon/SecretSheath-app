@@ -4,7 +4,7 @@ module SecretSheath
   # Behaviors of the currently logged in account
   class Folder
     attr_reader :id, :name, :description,
-                :owner, :sharers, :keys, :folders, :policies
+                :owner, :keys, :folders, :policies
 
     def initialize(folder_info)
       process_attributes(folder_info['attributes'])
@@ -24,7 +24,6 @@ module SecretSheath
       return unless relationships
 
       @owner = Account.new(relationships['owner'])
-      @sharers = process_sharers(relationships['sharers'])
       @keys = process_keys(relationships['keys'])
     end
 
@@ -36,12 +35,6 @@ module SecretSheath
       return nil unless keys_info
 
       keys_info.map { |key| Key.new(key) }
-    end
-
-    def process_sharers(sharers)
-      return nil unless sharers
-
-      sharers.map { |sharer| Account.new(sharer) }
     end
   end
 end

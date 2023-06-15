@@ -14,46 +14,28 @@ div class="row"
     - if folder.policies.can_add_keys
       button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newKeyModal" + New Key
 
-div class="row"
-  div class="col-lg-9"
-    div class="row"
-      table class="table"
-        thead
-          tr
-            th Key
-            th Description
-        tbody
-          - folder.keys.each do |key|
-            tr
-              td 
-                a href="" data-bs-target="#keyModal" data-bs-toggle="modal" data-key="#{key.name}"
-                  ==  "#{key.name}"
-              td #{key.description}
-            include :key_modal
-/     div class="row" style="height:10px;"
-/   div class="col-lg-3"
-/     div class="panel panel-default"
-/       div class="panel-heading" Collaborators
-/       div class="panel-body"
-/         - if folder.sharers.empty?
-/           span class="small" There are no sharers yet
-/         ul class="list-group"
-/           li class="list-group-item clearfix"
-/               = folder.owner.username
-/           - folder.sharers.each do |collaborator|
-/             li class="list-group-item clearfix"
-/               '  #{collaborator.username}
-/               - if folder.policies.can_remove_sharers
-/                 span class="float-end"
-/                   form role='form' method='post' action="/folders/#{folder.id}/sharers"
-/                     input type='hidden' name='action' value='remove'
-/                     input type='hidden' name='email' value="#{collaborator.email}"
-/                     button type="submit" class="btn btn-xs btn-default"
-/                       span class="fas fa-user-times"
-/         - if folder.policies.can_add_sharers
-/           button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCollaboratorModal" + Add Collaborator
+/ div class="row"
+/   div class="col-lg-9"
+/     div class="row"
+table class="table align-middle" id="key-table"
+  thead
+    tr
+      th Key Name
+      th Description
+      th Alias
+  tbody
+    - folder.keys.each do |key|
+      tr 
+        td
+          a href="/keys/#{folder.name}/#{key.alias}" data-bs-target="#keyModal" data-bs-toggle="modal"
+            == "#{key.name}"
+        td  #{key.description}
+        td class="text-body-secondary" #{key.alias}
 
 include :key_new_partial
+include :key_modal
+include :output  
+
 / include :collaborator_new_partial
 
 .row
@@ -63,6 +45,5 @@ include :key_new_partial
     - if folder.policies.can_delete
       == ' | '
       a href="" delete folder
-    - if folder.policies.can_leave
-      == ' | '
-      a href="" leave folder
+
+== assets([:js, :folder])

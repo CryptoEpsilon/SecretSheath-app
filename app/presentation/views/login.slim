@@ -5,24 +5,37 @@ link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-soc
 div class="row"
   div class="col-sm-4"
   div class="col-sm-4"
-    h3 class="text-center" Login
+    - if current_account
+      h3 class="text-center"
+        == "Welcome, "
+        br
+        span class="text-muted" #{current_account.username}
+      p class="text-muted"
+        == "Please provide passphrase to unlock master key"
+    - else
+      h3 class="text-center"
+        == "Login"
     form method='post' action='/auth/login' id='form-login'
       div class="form-group"
         div class='form-floating mb-3'
-          input type='text' class='form-control' id='input-username' placeholder='Username' name='username'
-          label for='input-username' Username
+          - if current_account
+            input type='hidden' class='form-control' id='input-username' placeholder='Username' name='username' value="#{current_account.username}" readonly=""
+          - else
+            input type='text' class='form-control' id='input-username' placeholder='Username' name='username'
+            label for='input-username' Username
         div class='form-floating'
           input type='password' class='form-control' id='input-password' placeholder='Password' name='password'
           label for='input-password' Password
       button type='submit' id='button-login' value='login' class="btn btn-primary btn-block mt-4" login
   div class="col-sm-4"
-div class="row mt-5"
-  div class="col-sm-4"
-  div class="col-sm-4 text-center"
-    h4 class="text-muted" or
-    div class="row mt-4"
-      a class="btn btn-block btn-social btn-github" href=gh_oauth_url
-          i class="fa fa-github fa-lg vertical-center"
+- unless current_account
+  div class="row mt-5"
+    div class="col-sm-4"
+    div class="col-sm-4 text-center"
+      h4 class="text-muted" or
+      div class="row mt-4"
+        a class="btn btn-block btn-social btn-github" href=gh_oauth_url
+          span class="fa fa-github fa-lg vertical-center"
           == "Github Sign-in"
-  div class="col-sm-4"
+    div class="col-sm-4"
   

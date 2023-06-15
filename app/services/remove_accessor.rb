@@ -4,7 +4,7 @@ require 'http'
 
 module SecretSheath
   # Create a new configuration file for a project
-  class RequestEncrypt
+  class RemoveAccessor
     def initialize(config)
       @config = config
     end
@@ -13,10 +13,11 @@ module SecretSheath
       @config.API_URL
     end
 
-    def call(current_account:, folder_name:, key_alias:, plaintext_data:)
-      config_url = "#{api_url}/encrypt/#{folder_name}/#{key_alias}"
+    def call(current_account:, folder_name:, key_alias:, accessor:)
+      config_url = "#{api_url}/keys/#{folder_name}/#{key_alias}/accessors"
       response = HTTP.auth("Bearer #{current_account.auth_token}")
-                     .post(config_url, json: plaintext_data)
+                     .delete(config_url, json: accessor)
+
       response.code == 200 ? response.body.to_s : raise
     end
   end

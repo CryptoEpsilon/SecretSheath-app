@@ -13,12 +13,13 @@ module SecretSheath
     end
 
     def call(registration_data)
-      registration_token = SecureMessage.encrypt(registration_data)
-      registration_data['verification_url'] =
-        "#{@config.APP_URL}/auth/register/#{registration_token}"
+      regis_req = registration_data.to_h
+      registration_token = SecureMessage.encrypt(regis_req)
+      regis_req['verification_url'] = "#{@config.APP_URL}/auth/register/#{registration_token}"
 
       response = HTTP.post("#{@config.API_URL}/auth/register",
-                           json: registration_data)
+                           json: SignedMessage.sign(regis_req))
+
       raise(VerificationError) unless response.code == 202
 
       JSON.parse(response.to_s)

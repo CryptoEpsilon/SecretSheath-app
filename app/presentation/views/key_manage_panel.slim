@@ -1,2 +1,23 @@
-button type="button" class="btn btn-primary" + Share
-button type="button" class="btn btn-danger" Delete Key
+div class="row"
+	div class="col-sm-6"
+		form role="form" action="" method="post" id="share-key-form"
+			div class="input-group mb-3"
+				input type="text" class="form-control" placeholder="Email of person to give access" aria-label="Accessor's email" aria-describedby="share-button" id="accessor-email-input" name="email"
+				input type="hidden" name="_method" value="put" id="add-accessor"
+				button type="button" class="btn btn-primary" id="share-button" + Share
+				div id="feedback"
+	div class="col-sm-6"
+div class="table-responsive-lg"
+	table class="table align-middle" id="accessor-table"
+		thead
+			tr
+				th Accessors
+				th Email
+				th Child Key Name
+				th Alias
+				th
+		tbody id="accessor-table-body"
+div class="modal-footer"
+	form role="form" action="" method="post" id='delete-key-form'
+		input type="hidden" name="action" value="remove"
+		button type="submit" class="btn btn-danger" Delete Key

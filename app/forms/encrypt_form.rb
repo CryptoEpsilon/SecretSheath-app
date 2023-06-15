@@ -10,6 +10,7 @@ module SecretSheath
 
       params do
         required(:plaintext).filled(:str?)
+        optional(:expire_in).maybe(:str?)
       end
     end
   end

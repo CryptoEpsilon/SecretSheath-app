@@ -3,19 +3,23 @@ div class="row" style="vertical-align: bottom;"
     h3 All Folders
   div class="col-xs-3"
     button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFolderModal" + New Folder
-table class="table"
+table class="table align-middle"
   thead
     tr
       th Folder name
       th Description
+      th
   tbody
     - folders.all.each do |folder|
       tr
-        td 
+        td
           a href="/folders/#{folder.name}" #{folder.name}
           td 
             a #{folder.description}
-    tr
-      td
-        a href="/folders/shared" Shared
+            td 
+              form role="form" action="/folders/#{folder.name}" method="post"
+                - if folder.policies.can_delete
+                  button type="submit" class="btn btn-light"
+                    i class="fas fa-trash-alt"
+
 include :folder_new_partial

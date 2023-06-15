@@ -8,30 +8,31 @@ module SecretSheath
   class App < Roda
     route('encrypt') do |routing|
       routing.on String, String do |folder_name, key_alias|
-        routing.redirect '/auth/login' unless @current_account.logged_in?
+        raise Account::AuthorizationError unless @current_account.logged_in?
+
         @encrypt_route = "/encrypt/#{folder_name}/#{key_alias}"
 
         # POST /encrypt/[folder_name]/[key_alias]
         routing.post do
-          plaintext_data = Form::EncryptForm.new.call(routing.params)
+          req_body = JSON.parse(routing.body.read, symbolize_names: true)
+          plaintext_data = Form::EncryptForm.new.call(req_body)
 
-          if plaintext_data.failure?
-            flash[:error] = Form.message_values(plaintext_data)
-            routing.halt
-          end
-          enc_res = RequestEncrypt.new(App.config).call(
+          routing.halt 400, { error: 'Bad Request' }.to_json if plaintext_data.failure?
+
+          RequestEncrypt.new(App.config).call(
             current_account: @current_account,
             folder_name:,
             key_alias:,
             plaintext_data: plaintext_data.to_h
           )
-          flash[:notice] = "Ciphertext: #{enc_res['data']['attributes']['ciphertext']}"
+        rescue Account::AuthorizationError => e
+          puts "FAILURE Creating key: #{e.inspect}"
+          puts e.backtrace
+          routing.halt 401, { message: 'Unauthorized' }.to_json
         rescue StandardError => e
           puts "FAILURE Creating key: #{e.inspect}"
           puts e.backtrace
-          flash[:error] = 'Could not process plaintext'
-        ensure
-          routing.redirect "/folders/#{folder_name}"
+          routing.halt 500, { message: 'Internal Server Error' }.to_json
         end
       end
     end

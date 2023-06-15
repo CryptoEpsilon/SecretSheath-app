@@ -29,23 +29,27 @@ module SecretSheath
             .post(@config.GH_TOKEN_URL,
                   form: { client_id: @config.GH_CLIENT_ID,
                           client_secret: @config.GH_CLIENT_SECRET,
-                          code: code })
+                          code: })
       raise UnauthorizedError unless challenge_response.status < 400
 
       JSON.parse(challenge_response)['access_token']
     end
 
     def get_sso_account_from_api(access_token)
+      signed_sso_info = { access_token: }.then { |sso_info| SignedMessage.sign(sso_info) }
+
       response =
         HTTP.post("#{@config.API_URL}/auth/sso",
-                  json: { access_token: })
+                  json: signed_sso_info)
       raise if response.code >= 400
 
       account_info = JSON.parse(response)['data']['attributes']
+      set_password = JSON.parse(response)['data']['attributes']['account']['set_password']
 
       {
         account: account_info['account'],
-        auth_token: account_info['auth_token']
+        registration_token: account_info['registration_token'],
+        set_password:
       }
     end
   end

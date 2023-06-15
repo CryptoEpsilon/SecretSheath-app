@@ -3,6 +3,9 @@
 module SecretSheath
   # Behaviors of the currently logged in account
   class Account
+    # Error for unauthorized access
+    class AuthorizationError < StandardError; end
+
     def initialize(account_info, auth_token = nil)
       @account_info = account_info
       @auth_token = auth_token
@@ -16,6 +19,16 @@ module SecretSheath
 
     def email
       @account_info ? @account_info['attributes']['email'] : nil
+    end
+
+    def summary
+      {
+        'type'=> 'acount',
+        'attributes'=> {
+          'username'=> username,
+          'email'=> email
+        }
+      }
     end
 
     def logged_out?

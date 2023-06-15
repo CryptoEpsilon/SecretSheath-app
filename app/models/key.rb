@@ -6,11 +6,13 @@ module SecretSheath
   # Behaviors of the currently logged in account
   class Key
     attr_reader :id, :name, :alias, :description, :short_alias, # basic info
-                :folder # full details
+                :folder, :children # full details
 
-    def initialize(info)
-      process_attributes(info['attributes'])
-      process_included(info['include'])
+    def initialize(key_info)
+      process_attributes(key_info['attributes'])
+      process_include(key_info['include'])
+      process_relationships(key_info['relationships'])
+      process_policies(key_info['policies'])
     end
 
     private
@@ -23,8 +25,40 @@ module SecretSheath
       @description    = attributes['description']
     end
 
-    def process_included(included)
-      @folder = Folder.new(included['folder'])
+    def process_include(include)
+      @folder = Folder.new(include['folder']) if include
+    end
+
+    def process_relationships(relationships)
+      return unless relationships
+
+      # @children = process_children(relationships['children'])
+    end
+
+    def process_policies(policies)
+      @policies = OpenStruct.new(policies)
+    end
+
+    def to_json(options = {}) # rubocop:disable Metrics/MethodLength
+      JSON(
+        {
+          type: 'key',
+          attributes: {
+            id:,
+            name:,
+            alias:,
+            short_alias:,
+            description:
+          },
+          include: {
+            folder:
+          },
+          relationships: {
+            children:
+          },
+          policies:
+        }, options
+      )
     end
   end
 end
