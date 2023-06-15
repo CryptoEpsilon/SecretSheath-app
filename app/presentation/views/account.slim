@@ -11,14 +11,15 @@ div class="container"
       == account.email
   div class="row top-buffer mt-4"
     h3 API Access:
-  div class="row"
-    span
-      = "(read only key valid for one month)"
-  div class="row"
-    div class="col-sm-2" API Key: 
-    div class="col-sm-10"
-      dd class="backquote"
-        a data-bs-toggle="collapse" href="#api_key" aria-expanded="false" aria-controls="api_key" show key
-        div id="api_key" class="collapse"
-          div class="card card-body"
-            pre class="text-wrap" #{account.auth_token}
+  - account.auth_token.each do |permission, auth_token|
+    div class="row"
+      span 
+        == "#{permission.upcase}: key valid for one month"
+    div class="row"
+      div class="col-sm-2" API Key: 
+      div class="col-sm-10"
+        dd class="backquote"
+          a data-bs-toggle="collapse" href="##{permission}_api_key" aria-expanded="false" aria-controls="##{permission}_api_key" show key
+          div id="#{permission}_api_key" class="collapse"
+            div class="card card-body"
+              pre class="text-wrap" #{auth_token}
