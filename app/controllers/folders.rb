@@ -57,6 +57,8 @@ module SecretSheath
             folder_data: folder_data.to_h
           )
           flash[:notice] = 'Folder created successfully'
+        rescue CreateNewFolder::DuplicateFolderError
+          flash[:error] = 'Folder already exists'
         rescue StandardError => e
           puts "FAILURE Creating folder: #{e.inspect}"
           flash[:error] = 'Could not create folder'

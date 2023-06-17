@@ -75,6 +75,8 @@ module SecretSheath
             key_data: key_data.to_h
           )
           flash[:notice] = 'Key created successfully'
+        rescue CreateNewKey::DuplicateKeyError
+          flash[:error] = 'Key already exists in this folder'
         rescue StandardError => e
           puts "FAILURE Creating key: #{e.inspect}"
           puts e.backtrace

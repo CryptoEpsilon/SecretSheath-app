@@ -18,7 +18,7 @@ module SecretSheath
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .put(config_url, json: accessor)
 
-      response.code == 200 ? response.body.to_s : raise
+      response.code == 201 ? response.body.to_s : raise
     end
   end
 end

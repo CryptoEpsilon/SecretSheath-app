@@ -5,6 +5,9 @@ require 'http'
 module SecretSheath
   # Create a new configuration file for a project
   class CreateNewKey
+    # Error for when the API returns a non-201 HTTP code
+    class DuplicateKeyError < StandardError; end
+
     def initialize(config)
       @config = config
     end
@@ -17,6 +20,8 @@ module SecretSheath
       config_url = "#{api_url}/keys/#{folder_name}"
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post(config_url, json: key_data)
+      raise DuplicateKeyError if response.code == 409
+
       response.code == 201 ? JSON.parse(response.body.to_s) : raise
     end
   end
